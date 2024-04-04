@@ -1,4 +1,6 @@
 import csv
+import matplotlib.pyplot as plt
+from collections import Counter
 
 class Record:
     """
@@ -115,6 +117,49 @@ class BusinessLayer:
         else:
             print("Invalid record index.")
 
+
+
+    def generate_bar_chart(self):
+        """Generate a vertical bar chart based on user input."""
+
+        # Dictionary mapping column names to display names
+        column_display_names = {
+        'source': 'Source',
+        'latin_name': 'Latin Name',
+        'english_name': 'English Name',
+        'french_name': 'French Name',
+        'year': 'Year',
+        'month': 'Month',
+        'number_otoliths': 'Number of Otoliths'
+    }
+        
+        try:
+            x_column = input("Enter the column name for the x-axis (e.g., 'source', 'latin_name', 'english_name', 'french_name', 'year', 'month', 'number_otoliths'): ")
+
+            x_values = []
+            
+            for record in self.records:
+                x_values.append(getattr(record, x_column))
+
+            x_counts = Counter(x_values)
+            unique_x_values = list(x_counts.keys())
+            y_values = list(x_counts.values())
+
+            # Get the display name for the x-axis label
+            x_label = column_display_names.get(x_column.lower(), x_column)
+                
+            plt.figure(figsize=(10, 6))
+            plt.bar(unique_x_values, y_values, color='skyblue')
+            plt.xlabel(x_label)  # Use the provided column name as the x-axis label
+            plt.ylabel('Count')
+            plt.title(f'Count of {x_label}')
+            plt.xticks(rotation=45, ha='right')
+            plt.tight_layout()
+            plt.show()
+        except Exception as e:
+            print(f"An error occurred while generating the bar chart: {e}")
+
+
 class PresentationLayer:
     """
     Presentation layer responsible for user interactions.
@@ -131,7 +176,8 @@ class PresentationLayer:
         print("3. Add a new record")
         print("4. Select, display, and edit a record")
         print("5. Delete a record")
-        print("6. Exit")
+        print("6. Generate vertical bar chart")
+        print("7. Exit")
 
     def start(self):
         """Start the presentation layer."""
@@ -151,6 +197,8 @@ class PresentationLayer:
             elif choice == '5':
                 self.delete_record()
             elif choice == '6':
+                self.business_layer.generate_bar_chart()
+            elif choice == '7':
                 break
             else:
                 print("Invalid choice. Please try again.")
