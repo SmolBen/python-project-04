@@ -152,7 +152,7 @@ class BusinessLayer:
             plt.bar(unique_x_values, y_values, color='skyblue')
             plt.xlabel(x_label)  # Use the provided column name as the x-axis label
             plt.ylabel('Count')
-            plt.title(f'Count of {x_label}')
+            plt.title(f'Count of {x_label} - Bar Chart by Ben Nguyen')
             plt.xticks(rotation=45, ha='right')
             plt.tight_layout()
             plt.show()
